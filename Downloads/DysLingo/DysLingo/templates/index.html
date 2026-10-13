@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="hero p-4 p-lg-5 mb-4">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-8">
+      <span class="eyebrow">YOUR READING SPACE</span>
+      <h1 class="display-5 fw-bold mt-2">Every reader learns in their own way.</h1>
+      <p class="lead mb-4">A friendly space to practice reading, listen to words, and follow progress at your own pace.</p>
+      <a class="btn btn-light btn-lg me-2" href="{{ url_for('reader') }}">Open Smart Reader</a>
+      <a class="btn btn-outline-light btn-lg" href="{{ url_for('practice') }}">Start practice</a>
+    </div>
+    <div class="col-lg-4"><div class="hero-note"><div class="fs-1">Aa</div><strong>Read. Listen. Practice.</strong><p class="mb-0 mt-2">Small steps can build confidence.</p></div></div>
+  </div>
+</section>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="metric"><span>Practice sessions</span><strong>{{ totals.n }}</strong><small>Saved on this device</small></div></div>
+  <div class="col-md-4"><div class="metric"><span>Average text match</span><strong>{{ "%.1f"|format(totals.accuracy) }}%</strong><small>Across saved sessions</small></div></div>
+  <div class="col-md-4"><div class="metric"><span>Average reading pace</span><strong>{{ "%.1f"|format(totals.wpm) }}</strong><small>Words/minute estimate</small></div></div>
+</div>
+<h2 class="h4 mb-3">Explore DysLingo</h2>
+<div class="row g-3">
+  {% for title,desc,url,icon in [
+  ("Smart Reader","Customize text, listen aloud, and use word highlighting.",url_for('reader'),"📖"),
+  ("Speech Practice","Compare a reading transcript with the target passage.","/practice","🎙️"),
+  ("Reading Check-in","Reflect on reading experiences with an informal questionnaire.",url_for('screening'),"🌱"),
+  ("Progress Insights","Review practice sessions and reading indicators.",url_for('analytics'),"📈")] %}
+  <div class="col-md-6 col-xl-3"><a class="feature-card" href="{{ url }}"><span class="feature-icon">{{ icon }}</span><h3 class="h5">{{ title }}</h3><p class="mb-0">{{ desc }}</p></a></div>
+  {% endfor %}
+</div>
+<div class="notice mt-4"><strong>A note about screening:</strong> DysLingo is a learning-support prototype, not a diagnostic tool. Any risk indicators need professional interpretation.</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Progress Insights{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">YOUR JOURNEY</span><h1>Progress Insights</h1><p>Review saved practice sessions on this computer.</p></div>
+<div class="panel">
+{% if sessions %}
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Date</th><th>Language</th><th>Text match</th><th>WPM estimate</th><th>Word differences</th></tr></thead><tbody>
+{% for s in sessions %}<tr><td>{{ s.created_at }}</td><td>{{ s.language }}</td><td>{{ "%.1f"|format(s.accuracy) }}%</td><td>{{ "%.1f"|format(s.wpm) }}</td><td>{{ s.errors }}</td></tr>{% endfor %}
+</tbody></table></div>
+<canvas id="progressChart" height="110" aria-label="Progress chart"></canvas>
+{% else %}<div class="empty-state"><div class="fs-1">📈</div><h2 class="h5">Your progress will appear here</h2><p>Complete a practice session to start building a history.</p><a class="btn btn-primary" href="{{ url_for('practice') }}">Start practice</a></div>{% endif %}
+</div>
+{% endblock %}
+{% block scripts %}
+{% if sessions %}<script src="https://cdn.jsdelivr.net/npm/chart.js"></script><script>
+new Chart(document.getElementById('progressChart'), {type:'line',data:{labels:[{% for s in sessions|reverse %}"{{ s.created_at }}"{% if not loop.last %},{% endif %}{% endfor %}],datasets:[{label:'Text match (%)',data:[{% for s in sessions|reverse %}{{ s.accuracy }}{% if not loop.last %},{% endif %}{% endfor %}],tension:.25}]},options:{responsive:true,scales:{y:{beginAtZero:true,max:100}}}});
+</script>{% endif %}
+{% endblock %}

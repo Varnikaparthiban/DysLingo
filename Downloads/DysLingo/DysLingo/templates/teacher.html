@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Teacher and Parent Portal{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">SUPPORT NETWORK</span><h1>Teacher & Parent Overview</h1><p>A local demonstration view of recorded practice data.</p></div>
+<div class="notice mb-4">This prototype has no login or role-based access control. Do not use it to store identifiable child data or deploy it publicly until authentication, consent, security, and privacy safeguards are implemented.</div>
+<div class="row g-3 mb-4"><div class="col-md-4"><div class="metric"><span>Recorded sessions</span><strong>{{ summary.n }}</strong></div></div><div class="col-md-4"><div class="metric"><span>Average text match</span><strong>{{ "%.1f"|format(summary.accuracy) }}%</strong></div></div><div class="col-md-4"><div class="metric"><span>Average WPM estimate</span><strong>{{ "%.1f"|format(summary.wpm) }}</strong></div></div></div>
+<div class="panel"><h2 class="h5 mb-3">Practice history</h2>
+{% if sessions %}<div class="table-responsive"><table class="table"><thead><tr><th>Date</th><th>Language</th><th>Accuracy</th><th>WPM estimate</th><th>Differences</th></tr></thead><tbody>{% for s in sessions %}<tr><td>{{ s.created_at }}</td><td>{{ s.language }}</td><td>{{ "%.1f"|format(s.accuracy) }}%</td><td>{{ "%.1f"|format(s.wpm) }}</td><td>{{ s.errors }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="text-secondary mb-0">No practice sessions have been recorded yet.</p>{% endif %}
+</div>
+{% endblock %}

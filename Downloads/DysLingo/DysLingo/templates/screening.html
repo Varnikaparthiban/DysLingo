@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Reading Check-in{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">REFLECTION</span><h1>Reading Check-in</h1><p>A short informal questionnaire about reading experiences.</p></div>
+<div class="notice mb-4"><strong>Important:</strong> This is a demonstration questionnaire, not a validated dyslexia screening instrument and not a diagnosis. Use it only to prompt supportive conversations.</div>
+<div class="panel">
+<form method="post">
+{% set questions = [
+("q1","Does the learner find it difficult to sound out unfamiliar words?"),
+("q2","Does the learner often confuse similar-looking letters or words?"),
+("q3","Does reading take more effort than expected for their age or learning stage?"),
+("q4","Does the learner lose their place or skip words while reading?"),
+("q5","Is spelling familiar words often challenging?"),
+("q6","Does the learner avoid reading because it feels frustrating?")] %}
+{% for key,question in questions %}
+<div class="question"><p class="fw-semibold">{{ loop.index }}. {{ question }}</p>
+<div class="d-flex flex-wrap gap-3">
+{% for value,label in [(0,"Never / rarely"),(1,"Sometimes"),(2,"Often")] %}
+<label class="choice"><input type="radio" name="{{ key }}" value="{{ value }}" required {% if request.form.get(key)==value|string %}checked{% endif %}> {{ label }}</label>
+{% endfor %}
+</div></div>
+{% endfor %}
+<button class="btn btn-primary btn-lg mt-3" type="submit">View check-in summary</button>
+</form>
+{% if result %}
+<hr class="my-4"><h2 class="h4">Your check-in summary</h2><p class="text-secondary">Demo score: {{ result.score }} / {{ result.max_score }}</p><h3 class="h5">{{ result.band }}</h3><p>{{ result.advice }}</p><p class="small text-secondary">{{ result.notice }}</p>
+{% endif %}
+</div>
+{% endblock %}

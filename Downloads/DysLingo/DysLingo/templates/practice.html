@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Speech Practice{% endblock %}
+{% block content %}
+<div class="page-heading"><span class="eyebrow">PRACTICE</span><h1>Adaptive Reading Practice</h1><p>Read a passage aloud, then use browser speech recognition or enter the transcript to review it.</p></div>
+<div class="row g-4">
+ <div class="col-lg-7"><div class="panel">
+ <form method="post" id="practiceForm">
+  <label class="form-label fw-semibold" for="language">Reading language</label><select class="form-select mb-3" name="language" id="language"><option value="en-US">English</option><option value="ta-IN">Tamil</option><option value="hi-IN">Hindi</option></select>
+  <label class="form-label fw-semibold" for="targetText">Passage</label><textarea class="form-control mb-3" rows="5" id="targetText" name="target_text" required placeholder="Paste the passage the learner will read...">{{ request.form.get('target_text','') }}</textarea>
+  <div class="d-flex flex-wrap gap-2 mb-3"><button type="button" class="btn btn-outline-primary" id="listenPractice">🔊 Listen to passage</button><button type="button" class="btn btn-outline-primary" id="startRecognition">🎙️ Start speech recognition</button><button type="button" class="btn btn-outline-secondary" id="stopRecognition">Stop microphone</button></div>
+  <label class="form-label fw-semibold" for="spokenText">Recognized or manually entered reading</label><textarea class="form-control mb-3" rows="5" id="spokenText" name="spoken_text" required placeholder="Speech recognition fills this in when supported. You can also type the transcript.">{{ request.form.get('spoken_text','') }}</textarea>
+  <button class="btn btn-primary btn-lg" type="submit">Analyze and save session</button>
+  <p class="small text-secondary mt-2 mb-0" id="speechStatus">Microphone access is optional. You can enter the transcript manually.</p>
+ </form></div></div>
+ <div class="col-lg-5">
+ {% if result %}
+ <div class="panel"><span class="eyebrow">SESSION FEEDBACK</span><h2 class="h4 mt-2">Your practice results</h2>
+ <div class="result-number">{{ result.accuracy }}<span>%</span></div><p>Text match (a simple word-overlap estimate)</p>
+ <div class="row g-2"><div class="col-6"><div class="mini-metric"><strong>{{ result.wpm }}</strong><span>Words/min estimate</span></div></div><div class="col-6"><div class="mini-metric"><strong>{{ result.errors }}</strong><span>Word differences</span></div></div></div>
+ <div class="notice mt-3">{{ result.feedback }}</div></div>
+ {% else %}
+ <div class="panel soft-panel"><h2 class="h5">How feedback works</h2><p>We compare the provided transcript with the passage and estimate a text-match score, word differences, and reading pace.</p><p class="mb-0">For this prototype, duration is estimated at one minute. True timing, pause detection, and phoneme-level pronunciation assessment need a timed recording pipeline and validation.</p></div>
+ {% endif %}
+ </div>
+</div>
+{% endblock %}
